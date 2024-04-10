@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  ataskapi:
+    image: ${DOCKER_REGISTRY-}ataskapi
+    build:
+      context: .
+      dockerfile: ATaskApi/Dockerfile
+
+  #unittestproject1:
+  #  image: ${DOCKER_REGISTRY-}unittestproject1
+  #  build:
+  #    context: .
+  #    dockerfile: UnitTestProject1/Dockerfile
+
