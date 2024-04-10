@@ -6,6 +6,9 @@ services:
     build:
       context: .
       dockerfile: ATaskApi/Dockerfile
+    environment:
+      - CONTAINER_NAME=ataskapi-container
+      - JENKINS_PORT=8081
 
   #unittestproject1:
   #  image: ${DOCKER_REGISTRY-}unittestproject1
