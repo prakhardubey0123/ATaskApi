@@ -23,7 +23,14 @@ namespace ATaskApi.Data
                 Id=3,
                 TaskName="DemoTask3",
                 TaskDescription="This is Demotask3"
+            },
+            new MyTaskDTO
+            {
+                Id=4,
+                TaskName="DemoTask4",
+                TaskDescription="This is Demotask4"
             }
+
 
         };
     }
