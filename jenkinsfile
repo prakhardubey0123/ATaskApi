@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+  
+    environment {
+        IMAGE_NAME = 'ataskapi'
+        IMAGE_TAG = 'latest'
+        CONTAINER_NAME = 'ataskapi-container'
+        JENKINS_PORT = '5269'
+        
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+               git 'https://github.com/prakhardubey0123/ATaskApi.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    sh 'dotnet build ATaskApi.sln --configuration Release'
+
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    sh 'dotnet test ATaskApi.sln --logger "trx;LogFileName=./ATaskApi.trx"'
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                script {
+                    sh 'docker-compose build'
+                }
+            }
+        }
+        
+        
+        
+
+   stage('Run Container') {
+      steps {
+        script {
+          // Check if conflicting container exists (optional)
+          def containerExists = sh(
+              script: 'docker ps -a -q -f name=^${CONTAINER_NAME}$',
+              returnStdout: true
+          ).trim()
+
+          if (containerExists) {
+            // Stop and remove conflicting container
+            sh "docker stop ${containerExists} && docker rm ${containerExists}"
+          }
+
+          // Start the container with the updated port mapping
+          sh "docker run -d -p ${JENKINS_PORT}:80 --name ${CONTAINER_NAME} ataskapi:latest"
+        }
+      }
+    }
+    }
+}
